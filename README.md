@@ -1,5 +1,5 @@
-#Backend (Python)
+# Backend (Python)
 - написан на фреймворке Flask
 
-#Model (Python)
+# Model (Python)
 - написан, используя OpenCV
