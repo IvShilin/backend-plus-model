@@ -19,21 +19,11 @@ if "USERS" in os.environ:
 
 @app.route('/upload', methods=['POST'])
 def upload_photo():
-    """
-    Uploads a photo and analyzes it to get the answers to the test.
-
-    Parameters:
-    - test_number (int): The test number.
-    - photo (UploadFile): The uploaded image file.
-
-    Returns:
-    - Dict[str, Any]: The result of analyzing the photo.
-    """
     test_number = int(request.form['test_number'])
     photo = request.files['photo']
 
     if test_number not in tests:
-        return jsonify({"error": "Test number not found"})
+        return jsonify({"error": "Номер теста не найден"})
 
     photos_dir = "photos"
     if not os.path.exists(photos_dir):
@@ -68,15 +58,6 @@ def upload_photo():
 
 @app.route('/auth', methods=['POST'])
 def auth():
-    """
-    Authenticates the user and saves test answers.
-
-    Parameters:
-    - request (Request): The HTTP request.
-
-    Returns:
-    - Dict[str, Any]: The result of authentication and saving answers.
-    """
     data = request.get_json()
     login = data.get("login")
     password = data.get("password")
