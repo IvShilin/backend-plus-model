@@ -1,17 +1,21 @@
 import os
+
 from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
+
+from cv_scan import process_image_and_find_solution
 
 app = Flask(__name__)
 
 users = {
-    "login": "123",
-    "admin": "admin"
+    "login": "test",
+    "admin": "test"
 }
 tests = {}
 
 if "USERS" in os.environ:
     users.update({k: v for k, v in [pair.split(":") for pair in os.environ["USERS"].split(",")]})
+
 
 @app.route('/upload', methods=['POST'])
 def upload_photo():
@@ -41,9 +45,9 @@ def upload_photo():
     correct_answers = [{"question": str(i), "correct_answer": answer} for i, answer in tests[test_number].items()]
 
     try:
-        answer = build_answer(os.path.join(photos_dir, filename), correct_answers, test_number)
+        answer = process_image_and_find_solution(os.path.join(photos_dir, filename), correct_answers, test_number)
     except ValueError as e:
-        return jsonify({"error": f"Ошибка обработки изображения: {e}", "answer": None})
+        return jsonify({"error": f"Ошибка процессинга изображения: {e}", "answer": None})
 
     if answer is None:
         return jsonify({"error": "Invalid photo format"})
@@ -60,6 +64,7 @@ def upload_photo():
     }
 
     return jsonify(result)
+
 
 @app.route('/auth', methods=['POST'])
 def auth():
@@ -90,6 +95,7 @@ def auth():
         tests[test_number][question] = correct_answer
 
     return jsonify({"result": "ok", "test_data": tests[test_number]})
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

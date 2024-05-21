@@ -34,7 +34,8 @@ def process_image(image_data: np.ndarray) -> np.ndarray:
     corrected_image = cv2.addWeighted(corrected_image, 1.5, cv2.GaussianBlur(corrected_image, (5, 5), 0), -0.5, 0)
     corrected_image = cv2.bilateralFilter(corrected_image, 5, 50, 50)
     corrected_image_gray = cv2.cvtColor(corrected_image, cv2.COLOR_BGR2GRAY)
-    corrected_image = cv2.adaptiveThreshold(corrected_image_gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
+    corrected_image = cv2.adaptiveThreshold(corrected_image_gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                                            cv2.THRESH_BINARY_INV, 11, 2)
     corrected_image = cv2.fastNlMeansDenoising(corrected_image, None, 10, 7, 21)
 
     return corrected_image
@@ -205,4 +206,3 @@ def process_image_and_find_solution(image_path, correct_answers):
     result = find_solution(centroid_points, column_contour_map, row_contour_map, correct_answers)
 
     return result
-
