@@ -2,4 +2,4 @@
 - написан на фреймворке Flask
 
 # Model (Python)
-- написан, используя OpenCV
+- написан при помощи open source библиотеки OpenCV
